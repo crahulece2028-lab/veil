@@ -3,9 +3,9 @@
 Run:  python tools/contrast_check.py
 Exit: 0 if every assertion holds, 1 otherwise.
 
-Tokens are parsed from prototype/tokens.css, which is the single source of
-truth. Do not duplicate hex values here: if this file and the stylesheet
-disagree, this file is the one that is wrong.
+Tokens are parsed from assets/tokens.css, which is the single source of
+truth for both the landing page and the prototype. Do not duplicate hex
+values here: if this file and the stylesheet disagree, this file is wrong.
 
 WCAG 2.2 thresholds used:
   - body text (< 24px)      >= 4.5:1   (AA normal)
@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ---------------------------------------------------------------- tokens
 
-TOKENS_CSS = Path(__file__).resolve().parent.parent / "prototype" / "tokens.css"
+TOKENS_CSS = Path(__file__).resolve().parent.parent / "assets" / "tokens.css"
 
 THEME_RE = re.compile(
     r":root\[data-theme='(?P<theme>dark|light)'\]\s*\{(?P<body>[^}]*)\}",

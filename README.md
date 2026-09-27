@@ -18,6 +18,7 @@ A complete, buildable concept package: strategy, product spec, design system, us
 | 05 | [`docs/05-wireframes.md`](docs/05-wireframes.md) | Annotated ASCII mockups of 24 mobile screens at 390 × 844 |
 | 06 | [`docs/06-safety-and-trust.md`](docs/06-safety-and-trust.md) | Threat model, anonymity architecture, moderation UX, escalation, legal posture |
 | 07 | [`docs/07-build-spec.md`](docs/07-build-spec.md) | Data model, API, delivery worker, analytics, DoD, build sequence, pre-launch gate |
+| — | [`index.html`](index.html) | **The website.** Public landing page: pitch, the loop, the six "never" rules, the anonymity mechanisms, and the honest risk. Served from the repo root |
 | — | [`prototype/index.html`](prototype/index.html) | **The interactive prototype** — 32 tappable screens. Open it in a browser; no build, no server, no dependencies |
 | — | [`tools/contrast_check.py`](tools/contrast_check.py) | Validates all 47 design-token contrast pairs against WCAG 2.2. Run: `python tools/contrast_check.py` |
 | — | [`tools/prototype_check.mjs`](tools/prototype_check.mjs) | Renders all 32 routes and asserts the product invariants. No dependencies. Run: `node tools/prototype_check.mjs` |
@@ -104,6 +105,11 @@ jitter, and the delivery worker are *described*, not simulated. Nothing sends an
 ## Repo
 
 ```
+index.html          the public landing page — this is the website root
+site.css            landing page styles, tokens only, no hardcoded colour
+site.js             theme toggle (the page has no other behaviour)
+assets/
+  tokens.css        light + dark tokens, typography — shared by site and prototype
 docs/
   01-concept-strategy.md
   02-product-spec.md
@@ -114,15 +120,18 @@ docs/
   07-build-spec.md
 prototype/
   index.html      entry point — open this
-  tokens.css      light + dark tokens, typography
   app.css         device frame, components, responsive + reduced motion
   data.js         icons and fixture data
   app.js          state machine, all 32 routes
 tools/
   contrast_check.py    WCAG 2.2 token contrast — no dependencies
-  prototype_check.mjs  route + invariant harness (needs playwright)
+  prototype_check.mjs  route + invariant harness — no dependencies
   prototype_audit.mjs  layout / tap-target / safe-area audit (needs playwright)
 ```
+
+`assets/tokens.css` is the single source of truth for colour. The landing page and the
+prototype both consume it, and `tools/contrast_check.py` parses it rather than keeping
+its own copy of the hexes — so the spec, the site, and the app cannot drift apart.
 
 ### Checks
 
