@@ -55,6 +55,11 @@
   --primary: #e0703a;
   --primary-pressed: #ee8a4e;
   --on-primary: #1a1004;
+  --grad-a: #f0c978;
+  --grad-b: #e0703a;
+  --on-grad: #1a1004;
+  --grad-card: #fbf3e4;
+  --on-grad-card: #241a0c;
   --accent: #f0c978;
   --on-accent: #1e1503;
   --success: #8fc79a;
@@ -87,6 +92,11 @@
   --primary: #a8460d;
   --primary-pressed: #8a380a;
   --on-primary: #ffffff;
+  --grad-a: #f0c978;
+  --grad-b: #d9762b;
+  --on-grad: #1a1004;
+  --grad-card: #fdf7ec;
+  --on-grad-card: #241a0c;
   --accent: #8a6a1f;
   --on-accent: #ffffff;
   --success: #2f6b3f;

@@ -70,6 +70,9 @@ PAIRS: list[tuple[str, str, str, float, str]] = [
     ("text-primary", "surface-sunken", "dark", 4.5, "dark: body text on sunken well"),
     ("border", "surface", "dark", 1.0, "dark: hairline border (decorative)"),
     ("border", "bg", "dark", 1.0, "dark: hairline border on bg (decorative)"),
+    ("on-grad", "grad-a", "dark", 4.5, "dark: text on gradient, light stop"),
+    ("on-grad", "grad-b", "dark", 4.5, "dark: text on gradient, dark stop"),
+    ("on-grad-card", "grad-card", "dark", 4.5, "dark: text on a card sitting on the gradient"),
     # --- light theme
     ("text-primary", "bg", "light", 4.5, "light: body text on bg"),
     ("text-primary", "surface", "light", 4.5, "light: body text on card"),
@@ -94,6 +97,9 @@ PAIRS: list[tuple[str, str, str, float, str]] = [
     ("seal", "bg", "light", 3.0, "light: seal glyph on bg"),
     ("border", "surface", "light", 1.0, "light: hairline border (decorative)"),
     ("border", "bg", "light", 1.0, "light: hairline border on bg (decorative)"),
+    ("on-grad", "grad-a", "light", 4.5, "light: text on gradient, light stop"),
+    ("on-grad", "grad-b", "light", 4.5, "light: text on gradient, dark stop"),
+    ("on-grad-card", "grad-card", "light", 4.5, "light: text on a card sitting on the gradient"),
 ]
 
 

@@ -83,7 +83,25 @@ The aesthetic argument: **overclaiming is ugly.** A screenshot of this panel sho
 
 ## 3. Color tokens
 
-Both themes fully specified and machine-verified. `tools/contrast_check.py` validates all 47 pairs against WCAG 2.2 (4.5:1 body, 3:1 large/non-text); current status: **47/47 pass**.
+Both themes fully specified and machine-verified. `tools/contrast_check.py` validates all 53 pairs against WCAG 2.2 (4.5:1 body, 3:1 large/non-text); current status: **53/53 pass**.
+
+### 3.0 Gradient surface tokens
+
+The public landing page paints text directly onto a warm gradient, so the gradient is
+treated as a first-class color surface with its own validated text colors rather than
+an ad-hoc `linear-gradient` in a stylesheet.
+
+| Role | Token | Dark | Light | Notes |
+|---|---|---|---|---|
+| Gradient light stop | `grad-a` | `#F0C978` | `#F0C978` | Honey, matches `accent` |
+| Gradient dark stop | `grad-b` | `#E0703A` | `#D9762B` | Ember. Lightened in light theme: the dark-theme value fails 4.5:1 against near-black text. |
+| Text on gradient | `on-grad` | `#1A1004` | `#1A1004` | 11.9:1 on the light stop, 5.9:1 on the dark stop |
+| Card sitting on a gradient | `grad-card` | `#FBF3E4` | `#FDF7EC` | Cream, so a card on the gradient is legible in both themes |
+| Text on that card | `on-grad-card` | `#241A0C` | `#241A0C` | 16:1 |
+
+These five exist because the marketing surface is a separate register from the app
+(see 3.4). The stops are opaque, which is what lets `tools/contrast_check.py` verify
+them as ordinary pairs.
 
 ### 3.1 Dark (default)
 
@@ -107,14 +125,15 @@ Both themes fully specified and machine-verified. `tools/contrast_check.py` vali
 | Danger / oxblood | `danger` | `#D1524F` | Report, delete, hard block |
 | Veil field | `veil` | `#272320` | The anonymous-person object |
 
-All 47 checked pairs are validated by `tools/contrast_check.py`, which parses
-`prototype/tokens.css` directly. The stylesheet is the single source of truth — the
-checker holds no hex values of its own, so the spec and the build cannot drift apart.
+All 53 checked pairs are validated by `tools/contrast_check.py`, which parses
+`assets/tokens.css` directly — the single stylesheet shared by the landing page and
+the prototype. The checker holds no hex values of its own, so the spec and the build
+cannot drift apart.
 
 ### 3.2 Light
 
-| Role | Token | Hex |
-|---|---|---|
+| Role | Token | Hex | Notes |
+|---|---|---|---|
 | Background | `bg` | `#FAF6F0` | Warm paper |
 | Card | `surface` | `#FFFFFF` |
 | Raised card | `surface-raised` | `#FFFFFF` |
@@ -139,6 +158,35 @@ checker holds no hex values of its own, so the spec and the build cannot drift a
 - **Color is never the only signal.** Every state also carries a shape change, an icon, and a text label. Heat levels, verification tiers, and report severities each have a distinct glyph (`check-circle`, `seal-check`, `alert-triangle`, `shield`, `lock`).
 - **No red for anything emotional.** `danger` is reserved for destructive and reporting actions. A rejected confession is *not* red; it is `text-tertiary` on `surface`. Shame is a design system, not a palette.
 - **Report and block screens are deliberately calm** — `surface`, no full-bleed red, no warning triangles larger than 20pt. The goal is a user reporting a threat to feel safe doing paperwork.
+
+### 3.4 Two registers: the app and the marketing surface
+
+The system has two deliberately different registers, and conflating them is the mistake
+to avoid.
+
+**The app** (`prototype/`) is governed by the whole of this document. Ink-and-ember on
+near-black, surface steps and hairlines, shadow reserved for genuinely floating layers.
+
+**The public landing page** (`index.html`) is a marketing surface and borrows the
+register people recognise from consumer social apps: a full-bleed warm gradient, large
+rounded cards, pill buttons, a single mobile-first column. It shares every token with
+the app, so both themes stay coherent.
+
+Three of the anti-patterns in section 10 are relaxed there, on purpose and only there:
+
+- **Full-bleed gradient background.** Allowed on the landing page only. The rule that
+  survives everywhere is *gradient text* — headline text on the gradient uses the
+  solid `on-grad` token, never a gradient fill, and every pairing is contrast-checked.
+- **Tinted shadow on the card stack.** The hero card is a genuinely floating object, so
+  a shadow is allowed. It is a `color-mix` of `on-grad`, not a coloured glow, and it
+  exists to separate the stack from the gradient.
+- **A card stack.** It is decoration, not a gesture. There is no drag, no fling, no
+  swipe handler, and no route behind it — and the page states outright that there is no
+  swiping. The product promise is *Sign it*, not discovery, so a swipe metaphor would
+  contradict the thesis. The cards carry no photographs or avatars, for the same reason
+  the app has none.
+
+The app itself keeps every rule in section 10 without exception.
 
 ## 4. Typography
 
@@ -240,7 +288,7 @@ Rules: lowercase-leaning, no exclamation marks in product copy, no emoji, no con
 
 ## 9. Accessibility commitments
 
-- All 47 token pairs verified by `tools/contrast_check.py` in CI on every token change. Failure blocks the build.
+- All 53 token pairs verified by `tools/contrast_check.py` in CI on every token change. Failure blocks the build.
 - Full Dynamic Type support to 200%; no truncation of user content; verified at 310pt.
 - Every icon-only control has an accessible name and announces its state (`sealed`, `signed`, `expired`, `selected`).
 - Decorative glyphs are `aria-hidden` / `isAccessibilityElement = false`; the seal is a single labelled element, not three nested shapes.
@@ -252,5 +300,8 @@ Rules: lowercase-leaning, no exclamation marks in product copy, no emoji, no con
 - `prefers-reduced-motion` fully honored per §5.4.
 
 ## 10. Anti-patterns explicitly banned
+
+These are banned in the app without exception. The three that the public landing page
+relaxes on purpose are listed in §3.4, and only that page is exempt.
 
 Emoji as structural icon · avatar components · like counts or reply counts · public feeds · streak/XP/badge systems · red for emotional states · carousels · autoplaying anything · gradient text · colored glow shadows · hero images · a "swipe" metaphor for discovery · the word "anonymous" in a celebratory tone · confetti on any send · a "reach" or "impressions" metric surfaced to users · copy that describes security without being literally true.

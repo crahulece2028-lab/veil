@@ -30,9 +30,9 @@ GitHub Pages publishes `master/`; the Vercel alias is the project's production d
 | 05 | [`docs/05-wireframes.md`](docs/05-wireframes.md) | Annotated ASCII mockups of 24 mobile screens at 390 × 844 |
 | 06 | [`docs/06-safety-and-trust.md`](docs/06-safety-and-trust.md) | Threat model, anonymity architecture, moderation UX, escalation, legal posture |
 | 07 | [`docs/07-build-spec.md`](docs/07-build-spec.md) | Data model, API, delivery worker, analytics, DoD, build sequence, pre-launch gate |
-| — | [`index.html`](index.html) | **The website.** Public landing page: pitch, the loop, the six "never" rules, the anonymity mechanisms, and the honest risk. Served from the repo root |
+| — | [`index.html`](index.html) | **The website.** Public landing page in the visual register of consumer social apps — full-bleed warm gradient, large rounded cards, pill buttons, mobile-first single column — carrying the pitch, the loop, the six "never" rules, the anonymity mechanisms, and the honest risk. Served from the repo root. No swipe mechanic: the promise is *Sign it*, not discovery |
 | — | [`prototype/index.html`](prototype/index.html) | **The interactive prototype** — 32 tappable screens. Open it in a browser; no build, no server, no dependencies |
-| — | [`tools/contrast_check.py`](tools/contrast_check.py) | Validates all 47 design-token contrast pairs against WCAG 2.2. Run: `python tools/contrast_check.py` |
+| — | [`tools/contrast_check.py`](tools/contrast_check.py) | Validates all 53 design-token contrast pairs against WCAG 2.2. Run: `python tools/contrast_check.py` |
 | — | [`tools/prototype_check.mjs`](tools/prototype_check.mjs) | Renders all 32 routes and asserts the product invariants. No dependencies. Run: `node tools/prototype_check.mjs` |
 | — | [`tools/prototype_audit.mjs`](tools/prototype_audit.mjs) | Walks all 32 screens in both themes checking overflow, 44pt tap targets, safe areas, and font fallback. Needs Playwright. Run: `node tools/prototype_audit.mjs prototype` |
 
@@ -148,7 +148,7 @@ its own copy of the hexes — so the spec, the site, and the app cannot drift ap
 ### Checks
 
 ```bash
-python tools/contrast_check.py            # 47/47 token pairs pass WCAG 2.2
+python tools/contrast_check.py            # 53/53 token pairs pass WCAG 2.2
 node tools/prototype_check.mjs            # 32/32 routes render, all invariants hold
 node tools/prototype_audit.mjs prototype  # 64 screen-theme pairs, no layout problems
 ```
@@ -160,7 +160,7 @@ rather than pulling in a browser. The audit is the only script that needs one:
 npm i -D playwright && npx playwright install chromium
 ```
 
-Current results: 47/47 contrast pairs pass · 32/32 routes render with invariants intact ·
+Current results: 53/53 contrast pairs pass · 32/32 routes render with invariants intact ·
 64/64 screen-theme combinations free of overflow, sub-44pt tap targets, safe-area
 collisions, and webfont fallback.
 

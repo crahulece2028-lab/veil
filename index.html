@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Veil — anonymous confessions for campus</title>
-<meta name="description" content="Veil is anonymous campus confessions with a reason to matter: you can only write to people you already have a verified connection to, and the payoff is Sign it — mutual, voluntary self-disclosure that is never silent." />
-<meta property="og:title" content="Veil — the drafts folder for your campus" />
-<meta property="og:description" content="Anonymous confessions for people you already know. No cold DMs, no public feed, no counts. The payoff is Sign it." />
+<title>Veil — say the thing you never said</title>
+<meta name="description" content="Anonymous campus confessions for people you already know. No cold DMs, no public feed, no counts. Write it, send it, and maybe they sign it back." />
+<meta property="og:title" content="Veil — say the thing you never said" />
+<meta property="og:description" content="Anonymous confessions for people you already know. The payoff is Sign it — mutual, voluntary, never silent." />
 <meta property="og:type" content="website" />
 <meta name="color-scheme" content="dark light" />
 <link rel="stylesheet" href="assets/tokens.css" />
@@ -16,8 +16,8 @@
   (function () {
     try {
       var saved = localStorage.getItem('veil-theme');
-      var t = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.dataset.theme = t;
+      document.documentElement.dataset.theme = saved ||
+        (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     } catch (e) { document.documentElement.dataset.theme = 'dark'; }
   })();
 </script>
@@ -27,25 +27,17 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="hdr">
-  <div class="wrap hdr__in">
+  <div class="column hdr__in">
     <a class="mark" href="#top">
-      <span class="mark__seal" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="8" />
-          <path d="M12 7.5 14 12l-2 4.5L10 12Z" fill="currentColor" stroke="none" />
-        </svg>
-      </span>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <path d="M12 7.5 14 12l-2 4.5L10 12Z" fill="currentColor" stroke="none" />
+      </svg>
       Veil
     </a>
-    <nav class="hdr__nav" aria-label="Sections">
-      <a href="#gap">The gap</a>
-      <a href="#loop">The loop</a>
-      <a href="#never">Never</a>
-      <a href="#anonymity">Anonymity</a>
-    </nav>
     <div class="hdr__act">
       <button class="tgl" id="themeBtn" type="button" aria-label="Switch colour theme">Light</button>
-      <a class="btn btn--sm" href="prototype/">Open prototype</a>
+      <a class="pill pill--sm" href="prototype/">Open app</a>
     </div>
   </div>
 </header>
@@ -53,184 +45,224 @@
 <main id="main">
 
   <section class="hero" id="top">
-    <div class="wrap">
-      <p class="eyebrow">Anonymous confessions for campus</p>
-      <h1 class="hero__h1">The drafts folder<br />for your campus.</h1>
-      <p class="hero__lede">
-        Say the thing you never said — anonymously, to someone you already know.
-        Every anonymous app gives you freedom to speak and no reason to.
-        Every named app gives you the reason and no freedom.
-        Veil keeps the relationship and removes the exposure.
+    <span class="hero__glow" aria-hidden="true"></span>
+    <div class="column">
+      <span class="tag">18+ &middot; .edu only</span>
+      <h1>Say the thing<br />you never said.</h1>
+      <p class="hero__sub">
+        Anonymous confessions for people you already know. No strangers, no public feed,
+        no counts. Write it, send it, and find out who it was.
       </p>
       <div class="hero__act">
-        <a class="btn btn--lg" href="prototype/">Open the 32-screen prototype</a>
-        <a class="btn btn--lg btn--outline" href="#anonymity">How the anonymity works</a>
+        <a class="pill pill--lg pill--on" href="prototype/">Open the prototype</a>
+        <a class="pill pill--lg pill--ghost" href="#how">How it works</a>
       </div>
-      <dl class="stats">
-        <div><dt>Screens</dt><dd>32</dd></div>
-        <div><dt>Channels to write</dt><dd>3</dd></div>
-        <div><dt>Cohort floor</dt><dd>250</dd></div>
-        <div><dt>Anonymity floor</dt><dd>k&thinsp;&ge;&thinsp;25</dd></div>
-      </dl>
+
+      <div class="deck" aria-label="Example of a Veil conversation">
+        <div class="card card--back2" aria-hidden="true"></div>
+        <div class="card card--back1" aria-hidden="true"></div>
+        <div class="card card--front">
+          <div class="veilcard__top">
+            <span class="veilcard__seal" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="8" />
+                <path d="M12 7.5 14 12l-2 4.5L10 12Z" fill="currentColor" stroke="none" />
+              </svg>
+            </span>
+            <span>
+              <span class="veilcard__who">they/them</span><br />
+              <span class="veilcard__sub">mood: tender &middot; 4 mutuals</span>
+            </span>
+          </div>
+          <p class="veilcard__body">
+            I sat behind you for a whole term and never turned around. Not because I had
+            nothing to say. Because saying it meant you would look up.
+          </p>
+          <div class="veilcard__foot">
+            <span class="pill pill--sm">Sign it</span>
+            <span class="pill pill--sm pill--outline">Warmth</span>
+          </div>
+        </div>
+      </div>
+      <p class="deckhint">Real screen from the prototype &mdash; no photographs, ever.</p>
     </div>
   </section>
 
-  <section class="band" id="gap">
-    <div class="wrap">
-      <h2 class="h2">The gap</h2>
-      <div class="gap">
-        <article class="gap__col">
+  <section class="sec" id="gap">
+    <div class="column">
+      <h2 class="sec__h">Everyone else made you pick.</h2>
+      <p class="sec__sub">Anonymous apps give you freedom to speak and no reason to.
+        Named apps give you the reason and no freedom. Veil keeps the relationship
+        and removes the exposure.</p>
+      <div class="grid2">
+        <article class="panel">
           <h3>Anonymous today</h3>
-          <p>Fills with strangers. Anyone can write to anyone, which means most of what
-             arrives is noise, and the volume turns people into content — the moment a
-             sender sees a visible “12 confessions received,” they optimise for cruelty
-             instead of honesty.</p>
-          <p class="gap__verdict">Freedom to speak. No reason to.</p>
+          <p>Fills with strangers. Anyone can write to anyone, so most of what arrives is
+            noise &mdash; and the moment a sender sees a &ldquo;12 confessions received&rdquo;
+            counter, they optimise for cruelty instead of honesty.</p>
+          <p class="verdict">Freedom to speak. No reason to.</p>
         </article>
-        <article class="gap__col">
+        <article class="panel">
           <h3>Named today</h3>
-          <p>Solves the reason by solving the exposure. A handle is a consistent
-             distinguishing mark, and in a campus of 30,000 with a dense graph, “you
-             recognise that gradient” is all the deanonymisation anyone needs.</p>
-          <p class="gap__verdict">The reason. No freedom.</p>
+          <p>Solves the reason by solving the exposure. A handle is still a consistent
+            distinguishing mark, and in a campus of 30,000 with a dense graph,
+            &ldquo;you recognise that gradient&rdquo; is all anyone needs.</p>
+          <p class="verdict">The reason. No freedom.</p>
         </article>
       </div>
-      <p class="pull">
-        Students don’t need a place to speak. They need somewhere to say the thing
-        <em>and have it land with the right person.</em>
-      </p>
     </div>
   </section>
 
-  <section class="band band--sunken" id="loop">
-    <div class="wrap">
-      <h2 class="h2">The loop, in five moves</h2>
-      <ol class="loop">
-        <li>
-          <span class="loop__n">01</span>
-          <h3>Verify</h3>
-          <p>18+ and a <code>.edu</code> address. No K&#8209;12, no exceptions — the age floor is
-             a legal constraint, not a content setting.</p>
+  <section class="sec" id="how">
+    <div class="column">
+      <h2 class="sec__h">Five moves. That&rsquo;s it.</h2>
+      <p class="sec__sub">No swiping, no discovery feed, no matches to browse. You can only
+        write to someone a verified connection already exists with.</p>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__n">1</span>
+          <div>
+            <h3>Verify you&rsquo;re a student</h3>
+            <p>18+ and a <code>.edu</code> address. No K&#8209;12, no exceptions &mdash; the age
+              floor is a legal constraint, not a content setting.</p>
+          </div>
         </li>
-        <li>
-          <span class="loop__n">02</span>
-          <h3>Build a circle</h3>
-          <p>People you already have a verified connection to. Suggested by
-             <strong>mutual degree</strong>, never by looks. Every add opens a channel,
-             and <strong>three channels are required before you can write</strong>.</p>
+        <li class="step">
+          <span class="step__n">2</span>
+          <div>
+            <h3>Build your circle</h3>
+            <p>People you already have a verified connection to, suggested by
+              <strong>mutual degree</strong> rather than looks. Three channels are required
+              before you can write a word.</p>
+          </div>
         </li>
-        <li>
-          <span class="loop__n">03</span>
-          <h3>Write</h3>
-          <p>To one person or a 5&#8211;8 person Circle Drop. Draft-first, prompt seeds, and a
-             pre-send tone pass. PII is a hard block; everything else is advisory.</p>
+        <li class="step">
+          <span class="step__n">3</span>
+          <div>
+            <h3>Write it</h3>
+            <p>To one person or a 5&ndash;8 person Circle Drop. Draft-first, with a pre-send
+              tone pass. A phone number is a hard block; everything else is advice.</p>
+          </div>
         </li>
-        <li>
-          <span class="loop__n">04</span>
-          <h3>Deliver</h3>
-          <p>Cover traffic, 10&#8211;90 minute jitter, and cohort floors, so arrival time
-             reveals nothing about send time. A 48&#8209;hour dissolve if unopened, which
-             removes the social pressure to check.</p>
+        <li class="step">
+          <span class="step__n">4</span>
+          <div>
+            <h3>It arrives quietly</h3>
+            <p>Cover traffic, 10&ndash;90 minute jitter, and cohort floors, so arrival time
+              reveals nothing about send time. Unread after 48 hours and it dissolves.</p>
+          </div>
         </li>
-        <li>
-          <span class="loop__n">05</span>
-          <h3>Sign it</h3>
-          <p>Either side may reveal their name. Only voluntarily, only mutually, never
-             silently, never to anyone else. Forever optional, both ways.</p>
+        <li class="step">
+          <span class="step__n">5</span>
+          <div>
+            <h3>They sign it back</h3>
+            <p>Either side can put their name to it. Only voluntarily, only mutually, never
+              silently, never to anyone else. Forever optional, both ways.</p>
+          </div>
         </li>
       </ol>
     </div>
   </section>
 
-  <section class="band" id="never">
-    <div class="wrap">
-      <h2 class="h2">Six things this will never do</h2>
-      <p class="lede-sm">Not “not in v1.” Not “behind a flag.” Each one is a product decision
-         with a reason, and each would need a founder-level reversal.</p>
-      <ul class="never">
-        <li><strong>No cold DMs.</strong> A channel must exist before you can write. This one rule removes most abuse before moderation is involved.</li>
-        <li><strong>No avatars.</strong> Not a silhouette, not initials, not a generated gradient. Anonymity is enforced by the absence of a distinguishing mark, so the absence has to be architectural.</li>
-        <li><strong>No counts.</strong> No reply counts, no follower counts, no view counts. Counts turn people into metrics.</li>
-        <li><strong>No public feed.</strong> The most-requested and most dangerous feature. A graph product with a feed is a broadcast product, and broadcast is the opposite of the promise.</li>
-        <li><strong>No images or voice.</strong> In a small graph a photo is an identity. Revisiting this needs a new anonymity design, not an upload endpoint.</li>
-        <li><strong>No paid visibility.</strong> A purchased impression is a lie about a relationship. No ads in the content surface, ever.</li>
+  <section class="sec" id="never">
+    <div class="column">
+      <h2 class="sec__h">Six things this will never do</h2>
+      <p class="sec__sub">Not &ldquo;not in v1.&rdquo; Not &ldquo;behind a flag.&rdquo; Each one
+        would need a founder-level reversal.</p>
+      <ul class="nlist">
+        <li><span class="no">No</span><strong>cold DMs.</strong> A channel has to exist before
+          you can write. One rule removes most abuse before moderation is involved.</li>
+        <li><span class="no">No</span><strong>avatars.</strong> Not a silhouette, not initials,
+          not a generated gradient. Anonymity is enforced by the absence of a distinguishing
+          mark, so the absence has to be architectural.</li>
+        <li><span class="no">No</span><strong>counts.</strong> No reply counts, no follower
+          counts, no view counts. Counts turn people into metrics.</li>
+        <li><span class="no">No</span><strong>public feed.</strong> The most requested and most
+          dangerous feature. A graph product with a feed is a broadcast product, and broadcast
+          is the opposite of the promise.</li>
+        <li><span class="no">No</span><strong>photos or voice.</strong> In a small graph a
+          photograph is an identity. Fixing that needs a new anonymity design, not an upload
+          button.</li>
+        <li><span class="no">No</span><strong>paid visibility.</strong> A purchased impression
+          is a lie about a relationship. No ads in the content surface, ever.</li>
       </ul>
     </div>
   </section>
 
-  <section class="band band--sign" id="signit">
-    <div class="wrap wrap--narrow center">
-      <p class="eyebrow">The moment</p>
-      <h2 class="sign__h">Sign it</h2>
-      <p class="sign__body">
-        The identity that “knows” you is never the person you’re talking to.
-        So the payoff isn’t anonymity — it’s the moment someone chooses to put their name
-        to what they said to you, and you find out it was the person you hoped.
-      </p>
-      <ul class="trio">
-        <li><strong>Mutual.</strong> You are asked separately, and their answer is never shown to you.</li>
-        <li><strong>Voluntary.</strong> Signing is never a condition of anything, and never expires as an option.</li>
-        <li><strong>Never silent.</strong> No one can be revealed without their own action. There is no server-side unmasking path.</li>
-      </ul>
-      <p class="sign__foot">No one else on campus can see either of your names. Not even moderators.</p>
-    </div>
-  </section>
-
-  <section class="band band--sunken" id="anonymity">
-    <div class="wrap">
-      <h2 class="h2">How the anonymity actually works</h2>
-      <p class="lede-sm">A promise nobody can check is a slogan. These are the mechanisms, and the
-         numbers are the floor, not the target.</p>
-      <div class="tbl" role="table" aria-label="Anonymity mechanisms">
-        <div class="tbl__r tbl__r--h" role="row">
-          <span role="columnheader">Mechanism</span>
-          <span role="columnheader">What it stops</span>
-        </div>
-        <div class="tbl__r" role="row"><span role="cell"><code>cover traffic</code></span><span role="cell">An empty inbox is indistinguishable from a busy one, so volume carries no signal</span></div>
-        <div class="tbl__r" role="row"><span role="cell"><code>10&#8211;90 min jitter</code></span><span role="cell">Arrival time cannot be back-solved into send time</span></div>
-        <div class="tbl__r" role="row"><span role="cell"><code>cohort floor 250</code></span><span role="cell">No campus can open a graph small enough to read</span></div>
-        <div class="tbl__r" role="row"><span role="cell"><code>k&#8201;&ge;&#8201;25</code></span><span role="cell">No recipient is ever 1-of-N, so no single reader is an outlier</span></div>
-        <div class="tbl__r" role="row"><span role="cell"><code>48h dissolve</code></span><span role="cell">Nothing waits forever to be opened, so nothing is leverage</span></div>
-        <div class="tbl__r" role="row"><span role="cell"><code>no read receipts</code></span><span role="cell">You cannot learn whether a specific person read you</span></div>
+  <section class="sec" id="sign">
+    <div class="column">
+      <div class="sign">
+        <span class="tag">The moment</span>
+        <h2>Sign it</h2>
+        <p>The identity that &ldquo;knows&rdquo; you is never the person you&rsquo;re talking
+          to. So the payoff isn&rsquo;t anonymity &mdash; it&rsquo;s the moment someone chooses
+          to put their name to what they said to you, and you find out it was the person you
+          hoped.</p>
+        <ul class="trio">
+          <li><strong>Mutual.</strong> You&rsquo;re asked separately, and their answer is
+            never shown to you.</li>
+          <li><strong>Voluntary.</strong> Signing is never a condition of anything and never
+            expires as an option.</li>
+          <li><strong>Never silent.</strong> Nobody can be revealed without their own action.
+            There is no server-side unmasking path.</li>
+        </ul>
+        <p class="sign__foot">No one else on campus sees either of your names. Not even
+          moderators.</p>
       </div>
-      <div class="honest">
+    </div>
+  </section>
+
+  <section class="sec" id="anonymity">
+    <div class="column">
+      <h2 class="sec__h">A promise you can actually check</h2>
+      <p class="sec__sub">A slogan nobody can verify is a slogan. These are the mechanisms,
+        and the numbers are floors rather than targets.</p>
+      <div class="spec">
+        <div class="spec__r"><code>cover traffic</code> &mdash; an empty inbox is
+          indistinguishable from a busy one, so volume carries no signal.</div>
+        <div class="spec__r"><code>10&ndash;90 min jitter</code> &mdash; arrival time can&rsquo;t
+          be back-solved into send time.</div>
+        <div class="spec__r"><code>cohort floor 250</code> &mdash; no campus can open a graph
+          small enough to read.</div>
+        <div class="spec__r"><code>k&thinsp;&ge;&thinsp;25</code> &mdash; no recipient is ever
+          1-of-N, so no single reader is an outlier.</div>
+        <div class="spec__r"><code>48h dissolve</code> &mdash; nothing waits forever to be
+          opened, so nothing is leverage.</div>
+        <div class="spec__r"><code>no read receipts</code> &mdash; you can&rsquo;t learn whether
+          one specific person read you.</div>
+      </div>
+      <div class="risk">
         <h3>The honest risk</h3>
-        <p>
-          In a small graph, a determined person may work out who sent something.
-          That cannot be engineered away, and any product claiming otherwise is lying.
-          What we can do is make the promise precisely true, make inference expensive
-          and noisy, and say the limit plainly in the product itself.
-          An app that overclaims here is worse than one that admits the limit.
-        </p>
+        <p>In a small graph, a determined person may work out who sent something. That
+          can&rsquo;t be engineered away, and any product claiming otherwise is lying. What we
+          can do is make the promise precisely true, make inference expensive and noisy, and
+          say the limit plainly in the product itself. An app that overclaims here is worse
+          than one that admits the limit.</p>
       </div>
     </div>
   </section>
 
-  <section class="band band--cta">
-    <div class="wrap wrap--narrow center">
-      <h2 class="h2">Read it with your thumb.</h2>
-      <p class="lede-sm center">
-        Thirty-two screens, both themes, real state transitions — circle building, the
-        three-channel gate, the seal breaking, Sign it, and the report, rate-limit, and
-        crisis paths. No build step, no install.
-      </p>
-      <div class="hero__act center">
-        <a class="btn btn--lg" href="prototype/">Open the prototype</a>
-        <a class="btn btn--lg btn--outline" href="docs/05-wireframes.md">Read the wireframes</a>
+  <section class="sec" id="go">
+    <div class="column center">
+      <h2 class="sec__h">Read it with your thumb</h2>
+      <p class="sec__sub">Thirty-two screens, both themes, real state transitions &mdash; circle
+        building, the three-channel gate, the seal breaking, Sign it, and the report,
+        rate-limit, and crisis paths. No install, no build step.</p>
+      <div class="hero__act hero__act--center">
+        <a class="pill pill--lg" href="prototype/">Open the prototype</a>
+        <a class="pill pill--lg pill--outline" href="docs/05-wireframes.md">Read the wireframes</a>
       </div>
-      <p class="tiny center dim" style="margin-top:24px">
-        This is a design prototype. Nothing sends anywhere, no data is collected,
-        and every name in it is fictional.
-      </p>
     </div>
   </section>
 
 </main>
 
 <footer class="ftr">
-  <div class="wrap ftr__in">
-    <p><strong>Veil</strong> — a concept package and interactive prototype. 18+, <code>.edu</code> only.</p>
-    <p class="dim">No ads in the content surface. No paid visibility. No anonymous tipping of the company.</p>
+  <div class="column">
+    <p><strong>Veil</strong> &mdash; a concept package and interactive prototype. 18+,
+      <code>.edu</code> only.</p>
+    <p>No ads in the content surface. No paid visibility. Nothing here sends anywhere, no
+      data is collected, and every name is fictional.</p>
   </div>
 </footer>
 
