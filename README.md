@@ -6,6 +6,18 @@ A complete, buildable concept package: strategy, product spec, design system, us
 
 ---
 
+## Live
+
+| | |
+|---|---|
+| **Site** | https://crahulece2028-lab.github.io/veil/ |
+| **Prototype** | https://crahulece2028-lab.github.io/veil/prototype/ |
+| **Mirror (Vercel)** | https://veil-beta-ashy.vercel.app/ |
+
+Both are the same static files served from the repository root, so a push updates them.
+GitHub Pages publishes `master/`; the Vercel alias is the project's production domain
+(per-deployment `*.vercel.app` URLs sit behind Vercel's login, so use the alias).
+
 ## Read in this order
 
 | # | Document | What it answers |
