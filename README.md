@@ -1,151 +1,83 @@
-# Veil — Anonymous Confessions for Campus
+# Wren
 
-**The drafts folder for your campus. Say the thing you never said — anonymously, to someone you already know.**
+**A dating prototype. Swipe, match, talk.**
 
-A complete, buildable concept package: strategy, product spec, design system, user flows, annotated wireframes, safety architecture, and an engineering handoff.
+`index.html` is the whole product: one self-contained file, no build step, no server, no
+dependencies, no network calls. Open it in a browser and it runs.
+
+```bash
+open index.html          # macOS
+start index.html         # Windows
+xdg-open index.html      # Linux
+```
 
 ---
 
-## Live
+## What it is
 
-| | |
+A complete, interactive dating-app prototype. Every screen is wired to real state: onboarding
+gates on a selfie check, swipes are draggable and undoable, matches open a working chat with
+typing indicators and canned replies, filters actually filter, and the safety surfaces
+(report, block, unmatch) really do remove people from the deck.
+
+It is a *prototype*, and it says so on screen. There is no backend, no authentication, no
+payment, and nothing is sent anywhere. All state lives in one `localStorage` key.
+
+| Surface | What's in it |
 |---|---|
-| **Site** | https://crahulece2028-lab.github.io/veil/ |
-| **Prototype** | https://crahulece2028-lab.github.io/veil/prototype/ |
-| **Mirror (Vercel)** | https://veil-beta-ashy.vercel.app/ |
+| **Onboarding** | Name, age, gender, orientation, intent, verification code, open prompts, selfie check, photo grid |
+| **Discover** | Draggable card deck with pass / like / super, per-card photo pips, prompt previews, tap-to-expand |
+| **Matches** | Match list with a 24-hour window, unread state, and a "say something first" nudge |
+| **Chat** | Threaded messages, typing indicator, delayed canned replies, per-match menu |
+| **You** | Profile, photo manager, preferences, preferences summary, settings, blocked list, reset |
+| **Safety** | Report with a fixed reason list, block, unmatch, re-verify, a daily like limit |
 
-Both are the same static files served from the repository root, so a push updates them.
-GitHub Pages publishes `master/`; the Vercel alias is the project's production domain
-(per-deployment `*.vercel.app` URLs sit behind Vercel's login, so use the alias).
+## Product decisions, written down
 
-## Read in this order
+The brief asked for the reasoning to be explicit, so it is here rather than buried in code.
 
-| # | Document | What it answers |
-|---|---|---|
-| 00 | **This file** | Orientation, the core loop, the one-page pitch |
-| 01 | [`docs/01-concept-strategy.md`](docs/01-concept-strategy.md) | Is this compelling? Who is it for? Why campus? What kills it? Go-to-market, business model, metrics, kill criteria, naming |
-| 02 | [`docs/02-product-spec.md`](docs/02-product-spec.md) | How does matching/connection actually work? How do confessions flow? What are the rules, limits, edge cases, and v1 scope? |
-| 03 | [`docs/03-design-system.md`](docs/03-design-system.md) | Tokens, type, motion, the anonymity visual language, copy voice, accessibility |
-| 04 | [`docs/04-user-flows.md`](docs/04-user-flows.md) | Step-by-step onboarding, sending, receiving, responding, signing, and the abuse paths |
-| 05 | [`docs/05-wireframes.md`](docs/05-wireframes.md) | Annotated ASCII mockups of 24 mobile screens at 390 × 844 |
-| 06 | [`docs/06-safety-and-trust.md`](docs/06-safety-and-trust.md) | Threat model, anonymity architecture, moderation UX, escalation, legal posture |
-| 07 | [`docs/07-build-spec.md`](docs/07-build-spec.md) | Data model, API, delivery worker, analytics, DoD, build sequence, pre-launch gate |
-| — | [`index.html`](index.html) | **The website.** Public landing page in the visual register of consumer social apps — full-bleed warm gradient, large rounded cards, pill buttons, mobile-first single column — carrying the pitch, the loop, the six "never" rules, the anonymity mechanisms, and the honest risk. Served from the repo root. No swipe mechanic: the promise is *Sign it*, not discovery |
-| — | [`prototype/index.html`](prototype/index.html) | **The interactive prototype** — 32 tappable screens. Open it in a browser; no build, no server, no dependencies |
-| — | [`tools/contrast_check.py`](tools/contrast_check.py) | Validates all 53 design-token contrast pairs against WCAG 2.2. Run: `python tools/contrast_check.py` |
-| — | [`tools/prototype_check.mjs`](tools/prototype_check.mjs) | Renders all 32 routes and asserts the product invariants. No dependencies. Run: `node tools/prototype_check.mjs` |
-| — | [`tools/prototype_audit.mjs`](tools/prototype_audit.mjs) | Walks all 32 screens in both themes checking overflow, 44pt tap targets, safe areas, and font fallback. Needs Playwright. Run: `node tools/prototype_audit.mjs prototype` |
+**Universal messaging is the default.** Settings also offer the Bumble-style restriction,
+where only one side of a match may send the first message. Universal is the default because
+the alternative has a known failure mode: a match that expires with nobody able to speak is
+a bad experience, and it is the single most common complaint about that model. A match that
+goes quiet should be a choice, not a rule. The restriction stays available for anyone who
+prefers it.
 
----
+**A match expires after 24 hours unless someone writes first.** The clock is visible from the
+moment of the match, not hidden in a settings page. This is the anti-stalemate mechanism: a
+dead conversation closes itself instead of sitting in an inbox forever.
 
-## The one-paragraph version
+**Twenty-five likes per calendar day, then a wall.** Not an upsell. The upgrade button
+discloses that no card is charged and nothing is taken.
 
-Every anonymous app today gives you freedom to speak and no reason to. Every named app gives you the reason and no freedom. Veil is the only one that keeps the relationship and removes the exposure: you can only write to people you already have a verified connection to, there are no public feeds, no follower counts, and no reply counts — and the identity that "knows" you is never the person you're talking to. The payoff is a moment we call **Sign it**: either side can reveal their name, but only voluntarily, only mutually, never silently, never to anyone else. Students don't need a place to speak. They need somewhere to say the thing *and have it land with the right person*. That's the whole company.
+**Generated portraits, not downloaded ones.** Every profile photo is an SVG generated in the
+page from the profile id, so the app is genuinely self-contained and works offline. Settings
+also has a "remote photos" switch that attempts real image URLs and falls back to the
+generated portrait on error, so the fallback path is real code rather than a comment.
 
-## The core loop, in five moves
+**Vanilla JS, not React.** React would have to come from a CDN, and the brief asked for one
+runnable file. State is a single object, re-rendered per screen. The swipe deck is the one
+surface that mutates the DOM directly, because rebuilding it mid-drag would destroy the
+gesture.
 
-```
-  verify .edu  ──►  build a Circle of people you know
-        │                    │
-        │                    ├── suggested by MUTUAL DEGREE, never by looks
-        │                    ├── every add opens a channel immediately
-        │                    └── hard gate: 3 channels before you can write
-        ▼
-     WRITE  ──►  pick a person (or a 5–8 person Circle Drop)
-        │        draft-first · prompt seeds · pre-send tone pass
-        │        seal mode: Sealed · 48h (default) · Circle Drop
-        │        ⚠ PII hard-block · ⚠ crisis check · everything else advisory
-        ▼
-   DELIVER  ──►  cover traffic + 10–90 min jitter + nightly waves
-        │        so arrival time reveals nothing about send time
-        │        ⏱ 48h dissolve if unopened  (kills social pressure)
-        ▼
-    READ  ──►  sealed envelope → a deliberate tap → the seal breaks (420ms)
-        │        one optional warmth tap, 3/day, no counts anywhere
-        ▼
-   REPLY / SIGN  ──►  reply stays anonymous
-                        │
-                        └── ▸ Sign it  ← THE MOMENT
-                            mutual, consensual, never silent,
-                            never to anyone else, forever optional
+## Verification
+
+Four Playwright harnesses. They need a browser; the app itself needs nothing.
+
+```bash
+npm i -D playwright && npx playwright install chromium
 ```
 
-## What makes it different, in one line each
-
-- **No cold DMs, ever.** A channel must exist before you can write. One rule kills most abuse.
-- **No avatars, ever.** Anonymity is enforced by the interface, because a policy can be leaked and a design cannot.
-- **No counts, ever.** Reply counts turn people into content; the moment someone has a visible "12 confessions received," every sender optimizes for cruelty.
-- **No public feed, ever.** Not in v1, not behind a flag, not for engagement. The most-requested and most dangerous feature.
-- **Text only, no images.** In a small graph, a photo is an identity. Revisiting this requires a new anonymity design, not an upload endpoint.
-- **The privacy receipt.** The trust panel is typeset like a security tool, not an About page. It is the most shareable asset the product owns.
-
-## The pitch, for an investor
-
-College is the ideal launch market for a graph-based anonymous product: everyone is inside a three-mile radius, "we go to the same school" is trust that costs nothing, and every graduating class wipes the network and re-seeds it. Distribution is an RA with a sticker sheet and a QR code on a vending machine. The product is socially viral by construction, because "someone should confess to you" is a gift, not an ad.
-
-**North Star: signed confessions per weekly active user.** It only increments when someone was brave enough to write, someone was willing to read, and both accepted each other. It cannot be inflated by engagement mechanics, and it is the only metric that measures a connection actually completed.
-
-**Revenue:** campus partnerships (orgs, career fairs, bookstore, later institutional advising dashboards) plus safety-as-premium — sign faster, unsend any time, more Circle members, Stealth mode. No ads, ever, in the content surface. No paid visibility boost, ever: a purchased impression would be a lie about a relationship.
-
-**The honest risk, stated up front:** in a small graph, a determined person may work out who sent something. That cannot be engineered away. What we can do is make the app's promise precisely true, make inference expensive and noisy, and say so plainly in the product. An app that overclaims here is worse than one that admits the limit.
-
-**Kill criteria, written down in advance** (`01` §11) so they can't be renegotiated when the numbers dip: under 15% week-one send rate twice running, report rate above 8 per 1,000, any unexplained deanonymization event, or median first-reply above 72 hours.
-
-## Try it
-
-Open [`prototype/index.html`](prototype/index.html) in any modern browser. It is a static
-file — no build step, no server, no `npm install`. Fonts load from Google Fonts; offline
-they fall back to the system stack and nothing breaks.
-
-What you get, on the left, is a full **screen index** — all 32 routes, named. Inside the
-phone is the real thing: tap anything. Things worth trying:
-
-| Try this | Why it matters |
+| Script | What it proves |
 |---|---|
-| **Welcome → How it works → Age gate** | The `.edu` and 18+ boundary, including the refusal path |
-| **Verify → Build your circle** | Watch the **3-channel hard gate** block writing until it is satisfied |
-| **Inbox → a thread → Sign it** | The whole thesis in one flow. It is mutual, and it is forever optional |
-| **Sign sheet → share my name** | The moment. Note that *they* are asked, separately, and the answer is never shown to you |
-| **Composer → "contains a phone number"** | PII is a **hard block**, not a warning. Then pick a seal mode |
-| **Report → Rate limit → Crisis** | The three screens that decide whether this is a product or a liability |
-| **The theme toggle, top right** | Every screen is designed in both light and dark, not just inverted |
-| **The annotation strip under the phone** | On every screen, stating the intent and the rule being enforced |
+| `node tools/wren_audit.mjs` | Onboarding end to end, deck gestures, filters, match flow, chat, sheets, persistence across reload, both themes |
+| `node tools/wren_rules.mjs` | The rules: match expiry and non-expiry, daily quota and daily rollover, undo refunding a like, report and block removing people, corrupt-state recovery, tap targets and accessible names, zero external requests |
+| `node tools/wren_visual.mjs` | 4 viewports × 2 themes × 4 screens, plus onboarding: no horizontal overflow, no clipped text |
+| `node tools/wren_polish.mjs` | WCAG 2.2 contrast on every text node in both themes, including card copy measured against the gradient scrim it actually sits on |
 
-The prototype is deliberately honest about being a prototype: cover traffic, delivery
-jitter, and the delivery worker are *described*, not simulated. Nothing sends anywhere.
+Current results: all four clean, zero uncaught JavaScript errors.
 
-## Repo
-
-```
-index.html          the public landing page — this is the website root
-site.css            landing page styles, tokens only, no hardcoded colour
-site.js             theme toggle (the page has no other behaviour)
-assets/
-  tokens.css        light + dark tokens, typography — shared by site and prototype
-docs/
-  01-concept-strategy.md
-  02-product-spec.md
-  03-design-system.md
-  04-user-flows.md
-  05-wireframes.md
-  06-safety-and-trust.md
-  07-build-spec.md
-prototype/
-  index.html      entry point — open this
-  app.css         device frame, components, responsive + reduced motion
-  data.js         icons and fixture data
-  app.js          state machine, all 32 routes
-tools/
-  contrast_check.py    WCAG 2.2 token contrast — no dependencies
-  prototype_check.mjs  route + invariant harness — no dependencies
-  prototype_audit.mjs  layout / tap-target / safe-area audit (needs playwright)
-```
-
-`assets/tokens.css` is the single source of truth for colour. The landing page and the
-prototype both consume it, and `tools/contrast_check.py` parses it rather than keeping
-its own copy of the hexes — so the spec, the site, and the app cannot drift apart.
-
-### Checks
+The Veil harnesses still run and still pass, because the Veil package below is untouched:
 
 ```bash
 python tools/contrast_check.py            # 53/53 token pairs pass WCAG 2.2
@@ -153,27 +85,69 @@ node tools/prototype_check.mjs            # 32/32 routes render, all invariants 
 node tools/prototype_audit.mjs prototype  # 64 screen-theme pairs, no layout problems
 ```
 
-The first two have **no dependencies** — the route harness stands up a small DOM stub
-rather than pulling in a browser. The audit is the only script that needs one:
+The first two have **no dependencies**. The three Playwright scripts are the only ones that
+need a browser.
 
-```bash
-npm i -D playwright && npx playwright install chromium
+---
+
+## The previous concept package: Veil
+
+This repository previously held **Veil**, an anonymous-confession product for campuses. The
+written package and the 32-screen interactive prototype are still here, intact and still
+verified by the tools above. Only the root page changed.
+
+- Live Veil (still serving the old root until a push happens):
+  <https://crahulece2028-lab.github.io/veil/> ·
+  <https://crahulece2028-lab.github.io/veil/prototype/> ·
+  <https://veil-beta-ashy.vercel.app/>
+- Recover the exact previous root page with `git show d2be33f:index.html`.
+
+| # | Document | What it answers |
+|---|---|---|
+| 01 | [`docs/01-concept-strategy.md`](docs/01-concept-strategy.md) | Is this compelling? Who is it for? Why campus? What kills it? |
+| 02 | [`docs/02-product-spec.md`](docs/02-product-spec.md) | How does matching and confession flow? Rules, limits, edge cases, v1 scope |
+| 03 | [`docs/03-design-system.md`](docs/03-design-system.md) | Tokens, type, motion, the anonymity visual language, copy voice |
+| 04 | [`docs/04-user-flows.md`](docs/04-user-flows.md) | Onboarding, sending, receiving, responding, signing, abuse paths |
+| 05 | [`docs/05-wireframes.md`](docs/05-wireframes.md) | Annotated ASCII mockups of 24 mobile screens |
+| 06 | [`docs/06-safety-and-trust.md`](docs/06-safety-and-trust.md) | Threat model, anonymity architecture, moderation UX, legal posture |
+| 07 | [`docs/07-build-spec.md`](docs/07-build-spec.md) | Data model, API, delivery worker, analytics, definition of done |
+| 08 | [`docs/08-wren.md`](docs/08-wren.md) | The Wren prototype: architecture, state, decisions, known limits |
+
+Note that Wren is a separate design system with its own tokens, defined in the page. It does
+not consume `assets/tokens.css`; the Veil prototype still does, which is why that file stays.
+
+## Repo
+
 ```
-
-Current results: 53/53 contrast pairs pass · 32/32 routes render with invariants intact ·
-64/64 screen-theme combinations free of overflow, sub-44pt tap targets, safe-area
-collisions, and webfont fallback.
+index.html            the Wren prototype — single file, this is the website root
+site.css              previous Veil landing page styles, kept for reversibility
+site.js               previous Veil theme toggle, kept for reversibility
+assets/
+  tokens.css          Veil light + dark tokens — still the source of truth for prototype/
+docs/
+  01…07               the Veil concept package (strategy, spec, design, flows, wireframes, safety, build)
+  08-wren.md          the Wren prototype notes
+prototype/
+  index.html          the Veil interactive prototype — open this
+  app.css  data.js  app.js
+tools/
+  wren_audit.mjs      Wren flows + persistence          (needs playwright)
+  wren_rules.mjs      Wren rules + resilience           (needs playwright)
+  wren_visual.mjs     Wren layout across viewports      (needs playwright)
+  wren_polish.mjs     Wren contrast + accessibility     (needs playwright)
+  contrast_check.py   Veil WCAG 2.2 token contrast      (no dependencies)
+  prototype_check.mjs Veil routes + invariants          (no dependencies)
+  prototype_audit.mjs Veil layout + tap targets         (needs playwright)
+```
 
 ## Status
 
-The written package is complete: strategy, spec, design system, flows, wireframes, threat
-model, and build spec. The **interactive prototype is also complete** — 32 screens, both
-themes, real state transitions, and the flows an investor or a first engineer will
-actually press through.
+Wren is a complete front-end prototype and nothing more. The screens are real, the state
+machine is real, and the rules are enforced rather than described. What does not exist is
+anything behind it: no accounts, no matching service, no delivery, no moderation pipeline,
+no payment. A prototype proves the interaction design holds up under a thumb; it does not
+prove a dating service is viable or safe to launch.
 
-No production software exists yet, and that distinction matters. The prototype demonstrates
-that the product can be *designed coherently*; it does not demonstrate that the anonymity
-architecture *works*. The first two engineering sprints (`07` §7) are foundations and
-motion, not product — the first shippable milestone is the minimum honest product, and the
-second is the sprint that makes the anonymity promise true. **Do not launch before that
-second sprint.**
+The obvious next steps, in order, are a real identity and photo pipeline, a moderation queue
+behind the report flow, and a decision about whether the 24-hour match window survives
+contact with real users.
