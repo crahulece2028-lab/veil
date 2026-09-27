@@ -96,11 +96,16 @@ This repository previously held **Veil**, an anonymous-confession product for ca
 written package and the 32-screen interactive prototype are still here, intact and still
 verified by the tools above. Only the root page changed.
 
-- Live Veil (still serving the old root until a push happens):
-  <https://crahulece2028-lab.github.io/veil/> ·
-  <https://crahulece2028-lab.github.io/veil/prototype/> ·
-  <https://veil-beta-ashy.vercel.app/>
-- Recover the exact previous root page with `git show d2be33f:index.html`.
+| Live | |
+|---|---|
+| **Wren** (the root, on both hosts) | <https://crahulece2028-lab.github.io/veil/> · <https://veil-beta-ashy.vercel.app/> |
+| **Veil prototype** (unchanged) | <https://crahulece2028-lab.github.io/veil/prototype/> |
+
+Recover the exact previous root page with `git show d2be33f:index.html`.
+
+GitHub Pages publishes `master/` automatically. The Vercel project is **not** git-connected,
+so pushing to GitHub does not update the Vercel alias — it needs
+`vercel --prod --yes` from the repo root, which is why the two hosts can drift apart.
 
 | # | Document | What it answers |
 |---|---|---|
