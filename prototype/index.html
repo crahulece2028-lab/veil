@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Veil — interactive prototype</title>
+<meta name="description" content="Interactive mobile prototype for Veil, anonymous confessions for campus. Tappable wireframes, live design tokens, and per-screen design rationale." />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="app.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='16' fill='none' stroke='%237c5cff' stroke-width='3'/%3E%3Cpath d='M24 16 27.5 24 24 32 20.5 24Z' fill='%237c5cff'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<div class="scrim" id="scrim" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:none"></div>
+
+<div class="studio">
+
+  <aside class="rail" id="rail" aria-label="Screens"></aside>
+
+  <main class="stage">
+    <div class="stage__bar">
+      <button class="navbtn" id="menuBtn" aria-label="Toggle screen list">Screens</button>
+      <button class="navbtn" id="backBtn">Back</button>
+      <button class="navbtn" id="fwdBtn">Next</button>
+      <button class="navbtn" id="themeBtn">Dark</button>
+      <button class="navbtn" id="motionBtn">Motion: full</button>
+      <button class="navbtn" id="specBtn">Notes</button>
+      <a class="navbtn" href="../docs/05-wireframes.md" target="_blank" rel="noopener">Wireframes</a>
+    </div>
+
+    <div class="device">
+      <div class="screen" id="screen" data-chrome="none"></div>
+    </div>
+
+    <p class="stage__hint">
+      Every screen is live and tappable — the composer saves, Add opens a channel, the seal breaks,
+      Sign it runs the reveal, and the rate limit and crisis paths are reachable.
+      Toggle <strong>Light</strong> to check that both themes hold, and <strong>Motion: reduced</strong>
+      to verify the accessibility paths. Tokens are the ones in <code>docs/03-design-system.md</code> and are
+      validated by <code>python tools/contrast_check.py</code>.
+    </p>
+  </main>
+
+  <aside class="spec" id="spec" aria-label="Design notes"></aside>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
